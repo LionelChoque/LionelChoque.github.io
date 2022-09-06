@@ -167,6 +167,7 @@ p{
     color: var(--dark-blue);
 }
 .container{
+    overflow: hidden;
    
 }
 .tecnologies{
@@ -185,10 +186,42 @@ img{
     flex-wrap: nowrap;
 }
 .project{
-    padding: 50px;
+    padding: 20px;
     margin: 20px;
+    font-size: 1.3rem;
+    color: var(--dark-blue);
+    border-radius: 5px;
+    border: solid 1px var(--body-color);
 }
 
+#img-encrypter:hover{
+    filter: blur(0px);
+    cursor: zoom-in;
+}
+.project:hover{
+    transform: scale(1.1 , 1.1);
+    transition-duration: 400ms;
+    text-shadow: 0px 0px 5px var(--dark-blue);
+
+}
+h4{
+    margin-top: 10px;
+}
+h4 > a{
+    color: var(--body-color);
+
+}
+small{
+    font-size:small;
+}
+small > a{
+    color: var(--dark-blue);
+
+}
+small > a:hover{
+    text-decoration: underline;
+
+}
 #contact{
     background-color: var(--yellow-2);
     border: solid 2px var(--dark-blue);
