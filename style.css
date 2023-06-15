@@ -21,6 +21,9 @@
     justify-content: center;
     align-items: center;
 }
+#main{
+    max-width: 100%;
+}
 
 #header{
     display: flex;
@@ -45,7 +48,6 @@
     justify-content: center;
     align-items: center;
     font-size: 1.3rem;
-   
 }
 a{
     text-decoration: none;
@@ -119,7 +121,6 @@ strong{
     font-size: 1.7rem;
     margin-left: 0.4rem;
     color: var(--dark-blue);
-   
 }
 .big-heading {  
     font-size: 5rem;
@@ -146,9 +147,35 @@ strong{
 #img-rocket{
     float: right;
 }
+#img-api{
+    float: left;
+    padding: 0 1rem;
+}
+#img-mvc{
+    float: right;
+    padding: 1rem;
+}
+#img-equipo{
+    float: left;
+    padding: 0 1rem;
+}
 #img-work{
     float:left;
     margin-right: 15px;
+}
+#high {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    font-style: italic;
+    border: solid 3px var(--gray-color);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: auto;
+    text-align: center;
+    text-decoration: underline;
+    width: 90%;
 }
 p{
     font-size: 1.2rem;
@@ -168,7 +195,6 @@ p{
 }
 .container{
     overflow: hidden;
-   
 }
 .tecnologies{
     list-style: inside;
@@ -199,7 +225,7 @@ img{
     
 }
 .project:hover{
-    transform: scale(1.1 , 1.1);
+    transform: scale(1 , 1.05);
     transition-duration: 400ms;
     text-shadow: 0px 0px 5px var(--dark-blue);
 
@@ -226,14 +252,16 @@ small > a:hover{
     background-color: var(--yellow-2);
     border: solid 2px var(--dark-blue);
     border-radius: 5px;
+    width: 55%;
+    margin: auto;
 }
 form{
-   width: 600px;
-   margin: auto;
-   padding: 10px 20px;
-   box-sizing: border-box;
-   display: flex;
-   flex-direction: column;
+    width: 600px;
+    margin: auto;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    flex-direction: column;
+    display: flex;
 }
 
 input, label, textarea{
@@ -265,7 +293,6 @@ textarea{
     transition: 700ms;
     color:var(--dark-blue);
     transform: scale(1.08);
-   
 }
 footer{
     margin:0;
@@ -377,6 +404,9 @@ footer{
         background-color: #fff;
         margin:0;
     }
+    #high{
+        width: auto;
+    }
     .subtittles{
         position: sticky;
         top:3.8rem;
@@ -389,10 +419,12 @@ footer{
     }
     form{
         width: 100%;
-       
     }
     #contact{
-        margin: 20px 0;
+        width: auto;
+    }
+    form{
+        padding: 0;
     }
     #contact > h2{
         background: none;
@@ -406,6 +438,7 @@ footer{
     }
     footer{
         text-align: center;
-        padding: 50px 20px;
+        padding: 20px 20px;
     }
+
 }
