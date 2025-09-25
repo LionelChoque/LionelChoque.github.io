@@ -408,11 +408,11 @@
                     <form action="https://formspree.io/f/mnqrnoqg" method="POST" class="contact-form" id="contactForm">
                         <h4>Envíame un mensaje</h4>
                         
-                        <!-- Campos ocultos para mejor configuración -->
+                        <!-- Campos ocultos para mejor configuración de Formspree -->
                         <input type="hidden" name="_subject" value="Nuevo mensaje desde Portfolio - Lionel Choque">
-                        <input type="hidden" name="_next" value="https://lionelchoque.github.io/">
+                        <input type="hidden" name="_replyto" value="email">
+                        <input type="hidden" name="_next" value="https://lionelchoque.github.io/#contact">
                         <input type="hidden" name="_captcha" value="false">
-                        <input type="hidden" name="_template" value="box">
                         
                         <div class="form-group">
                             <label for="name">Tu nombre:</label>
@@ -654,7 +654,7 @@
             });
         });
 
-        // Formulario de contacto con Formspree
+        // Formulario de contacto con Formspree - Versión mejorada con debugging
         document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
@@ -663,14 +663,22 @@
             const btnLoading = submitBtn.querySelector('.btn-loading');
             const formStatus = document.getElementById('form-status');
 
+            // Debug: Log del intento de envío
+            console.log('🚀 Intentando enviar formulario a Formspree...');
+
             // Mostrar estado de carga
             btnText.style.display = 'none';
             btnLoading.style.display = 'inline';
             submitBtn.disabled = true;
 
             try {
-                // Enviar datos a Formspree
+                // Preparar datos del formulario
                 const formData = new FormData(this);
+
+                // Debug: Mostrar datos que se están enviando
+                console.log('📝 Datos del formulario:', Object.fromEntries(formData));
+
+                // Enviar datos a Formspree
                 const response = await fetch(this.action, {
                     method: 'POST',
                     body: formData,
@@ -678,6 +686,11 @@
                         'Accept': 'application/json'
                     }
                 });
+
+                console.log('📡 Respuesta del servidor:', response.status, response.statusText);
+
+                const responseData = await response.json().catch(() => ({}));
+                console.log('📋 Datos de respuesta:', responseData);
 
                 if (response.ok) {
                     // Mostrar mensaje de éxito
@@ -696,21 +709,27 @@
                         formStatus.style.display = 'none';
                     }, 8000);
                 } else {
-                    throw new Error('Error en el envío');
+                    // Error específico de Formspree
+                    const errorMsg = responseData.error || responseData.errors?.map(e => e.message).join(', ') || 'Error desconocido';
+                    console.error('❌ Error de Formspree:', errorMsg);
+                    throw new Error(`Error ${response.status}: ${errorMsg}`);
                 }
             } catch (error) {
-                // Mostrar mensaje de error
+                console.error('💥 Error en el envío:', error);
+
+                // Mostrar mensaje de error más detallado
                 formStatus.innerHTML = `
                     <div style="background: #dc3545; color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
-                        ❌ Error al enviar el mensaje. Por favor, intenta de nuevo o contáctame directamente por email.
+                        ❌ Error al enviar el mensaje: ${error.message}<br>
+                        <small>Por favor, intenta de nuevo o contáctame directamente a lionelchoque@gmail.com</small>
                     </div>
                 `;
                 formStatus.style.display = 'block';
 
-                // Ocultar mensaje de error después de 10 segundos
+                // Ocultar mensaje de error después de 15 segundos
                 setTimeout(() => {
                     formStatus.style.display = 'none';
-                }, 10000);
+                }, 15000);
             } finally {
                 // Restaurar botón
                 btnText.style.display = 'inline';
