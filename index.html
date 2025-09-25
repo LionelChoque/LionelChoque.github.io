@@ -13,7 +13,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Lionel Choque - Desarrollador de Sistemas">
@@ -405,11 +408,8 @@
                 </div>
 
                 <div class="contact-form-container">
-                    <form action="https://formspree.io/f/mnqrnoqg" method="POST" class="contact-form" id="contactForm">
+                    <form class="contact-form" id="contactForm">
                         <h4>Envíame un mensaje</h4>
-                        
-                        <!-- Campos ocultos para mejor configuración de Formspree -->
-                        <input type="hidden" name="_subject" value="Nuevo mensaje desde Portfolio - Lionel Choque">
                         
                         <div class="form-group">
                             <label for="name">Tu nombre:</label>
@@ -651,8 +651,13 @@
             });
         });
 
-        // Formulario de contacto con Formspree - Versión mejorada con debugging
-        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        // Inicializar EmailJS
+        (function() {
+            emailjs.init("J0MWvGFyUc9D5EGpN");
+        })();
+
+        // Formulario de contacto con EmailJS
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const submitBtn = document.getElementById('submitBtn');
@@ -661,43 +666,31 @@
             const formStatus = document.getElementById('form-status');
 
             // Debug: Log del intento de envío
-            console.log('🚀 Intentando enviar formulario a Formspree...');
+            console.log('🚀 Intentando enviar formulario con EmailJS...');
 
             // Mostrar estado de carga
             btnText.style.display = 'none';
             btnLoading.style.display = 'inline';
             submitBtn.disabled = true;
 
-            try {
-                // Preparar datos del formulario
-                const formData = new FormData(this);
+            // Preparar datos del formulario
+            const templateParams = {
+                from_name: this.name.value,
+                from_email: this.email.value,
+                company: this.company.value || 'No especificada',
+                subject: this.subject.value,
+                message: this.message.value,
+                phone: this.phone.value || 'No especificado',
+                to_email: 'lionelchoque@gmail.com'
+            };
 
-                // Debug: Mostrar datos que se están enviando
-                console.log('📝 Datos del formulario:', Object.fromEntries(formData));
+            console.log('📝 Datos a enviar:', templateParams);
 
-                // Enviar datos a Formspree
-                const response = await fetch(this.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                });
+            // Enviar email usando EmailJS
+            emailjs.send('service_giga8em', 'template_3fkvq2k', templateParams)
+                .then(function(response) {
+                    console.log('✅ Email enviado exitosamente:', response.status, response.text);
 
-                console.log('📡 Respuesta del servidor:', response.status, response.statusText);
-
-                const responseData = await response.json().catch(() => ({}));
-                console.log('📋 Datos de respuesta:', responseData);
-
-                // Debug específico para errores de validación
-                if (responseData.errors) {
-                    console.log('🚨 Errores de validación detallados:', responseData.errors);
-                    responseData.errors.forEach((error, index) => {
-                        console.log(`Error ${index + 1}:`, error);
-                    });
-                }
-
-                if (response.ok) {
                     // Mostrar mensaje de éxito
                     formStatus.innerHTML = `
                         <div style="background: var(--emerald-green); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
@@ -707,40 +700,35 @@
                     formStatus.style.display = 'block';
 
                     // Resetear formulario
-                    this.reset();
+                    document.getElementById('contactForm').reset();
 
                     // Ocultar mensaje después de 8 segundos
                     setTimeout(() => {
                         formStatus.style.display = 'none';
                     }, 8000);
-                } else {
-                    // Error específico de Formspree
-                    const errorMsg = responseData.error || responseData.errors?.map(e => e.message).join(', ') || 'Error desconocido';
-                    console.error('❌ Error de Formspree:', errorMsg);
-                    throw new Error(`Error ${response.status}: ${errorMsg}`);
-                }
-            } catch (error) {
-                console.error('💥 Error en el envío:', error);
 
-                // Mostrar mensaje de error más detallado
-                formStatus.innerHTML = `
-                    <div style="background: #dc3545; color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
-                        ❌ Error al enviar el mensaje: ${error.message}<br>
-                        <small>Por favor, intenta de nuevo o contáctame directamente a lionelchoque@gmail.com</small>
-                    </div>
-                `;
-                formStatus.style.display = 'block';
+                }, function(error) {
+                    console.error('❌ Error al enviar email:', error);
 
-                // Ocultar mensaje de error después de 15 segundos
-                setTimeout(() => {
-                    formStatus.style.display = 'none';
-                }, 15000);
-            } finally {
-                // Restaurar botón
-                btnText.style.display = 'inline';
-                btnLoading.style.display = 'none';
-                submitBtn.disabled = false;
-            }
+                    // Mostrar mensaje de error
+                    formStatus.innerHTML = `
+                        <div style="background: #dc3545; color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
+                            ❌ Error al enviar el mensaje. Por favor, intenta de nuevo o contáctame directamente a lionelchoque@gmail.com
+                        </div>
+                    `;
+                    formStatus.style.display = 'block';
+
+                    // Ocultar mensaje de error después de 10 segundos
+                    setTimeout(() => {
+                        formStatus.style.display = 'none';
+                    }, 10000);
+
+                }).finally(function() {
+                    // Restaurar botón
+                    btnText.style.display = 'inline';
+                    btnLoading.style.display = 'none';
+                    submitBtn.disabled = false;
+                });
         });
 
         // Validación en tiempo real
