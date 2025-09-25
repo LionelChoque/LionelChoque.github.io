@@ -263,8 +263,10 @@ small > a:hover{
     background-color: var(--orange-light);
     border: solid 2px var(--dark-blue);
     border-radius: 5px;
-    width: 55%;
+    width: 75%;
+    max-width: 1200px;
     margin: auto;
+    box-sizing: border-box;
 }
 form{
     width: 600px;
@@ -904,9 +906,11 @@ body {
 
 .contact-methods {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
     margin: 2rem 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .contact-method {
@@ -1380,6 +1384,13 @@ footer{
         line-height: 1.5;
     }
 
+    /* Contenedor de contacto responsivo */
+    #contact {
+        width: 95%;
+        margin: 1rem auto;
+        padding: 1rem;
+    }
+
     /* Mejoras específicas para el formulario */
     .contact-form-container {
         margin: 1rem 0;
@@ -1520,10 +1531,16 @@ footer{
     .contact-methods {
         grid-template-columns: 1fr;
         gap: 1rem;
+        margin: 1rem 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .contact-method {
         padding: 1.5rem 1rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .cv-buttons {
@@ -1618,6 +1635,16 @@ footer{
     .contact-method {
         padding: 1rem 0.8rem;
         margin: 0.8rem 0;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Contenedor de contacto en pantallas muy pequeñas */
+    #contact {
+        width: 98%;
+        margin: 0.5rem auto;
+        padding: 0.8rem;
     }
 
     .contact-form-container {
