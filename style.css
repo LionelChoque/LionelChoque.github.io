@@ -43,10 +43,13 @@
     width: 100%;
     height: 4rem;
     color: var(--light-gray);
-    top:0;
+    top: 0;
     position: sticky;
-    background-color:#fff ;
-    
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 .nav-bar{
     display: inline-flex;
@@ -302,6 +305,75 @@ textarea{
     color:var(--dark-blue);
     transform: scale(1.08);
 }
+/* Scroll suave y mejoras generales */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+/* Animaciones de aparición (respetan preferencias de usuario) */
+@media (prefers-reduced-motion: no-preference) {
+    .fadeup {
+        opacity: 0;
+        animation: fadeUpIn 0.8s ease forwards;
+    }
+
+    .fadeup:nth-child(1) { animation-delay: 0.1s; }
+    .fadeup:nth-child(2) { animation-delay: 0.2s; }
+    .fadeup:nth-child(3) { animation-delay: 0.3s; }
+    .fadeup:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes fadeUpIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fadeup {
+        opacity: 1;
+    }
+
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Selection personalizada */
+::selection {
+    background: rgba(255, 202, 40, 0.3);
+    color: var(--primary-blue);
+}
+
+/* Scroll personalizado */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--orange-light);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-blue);
+}
+
 /* Nuevos estilos para el sitio actualizado */
 
 /* Hero Stats */
@@ -900,13 +972,14 @@ textarea{
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 0.8rem;
-    border: 2px solid var(--orange-light);
-    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    border: 2px solid var(--gray-200);
+    border-radius: 10px;
     font-size: 1rem;
     color: var(--deep-navy);
     background: white;
-    transition: border-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .form-group input:focus,
@@ -914,13 +987,36 @@ textarea{
 .form-group textarea:focus {
     outline: none;
     border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-group input:hover,
+.form-group select:hover,
+.form-group textarea:hover {
+    border-color: var(--orange-light);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
 }
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
     color: var(--light-gray);
-    opacity: 0.7;
+    opacity: 0.8;
+    font-style: italic;
+}
+
+/* Validación visual mejorada */
+.form-group input:valid,
+.form-group select:valid,
+.form-group textarea:valid {
+    border-color: var(--emerald-green);
+}
+
+.form-group input:invalid:not(:focus):not(:placeholder-shown),
+.form-group select:invalid:not(:focus),
+.form-group textarea:invalid:not(:focus):not(:placeholder-shown) {
+    border-color: #dc3545;
+    background-color: rgba(220, 53, 69, 0.05);
 }
 
 .form-status {
@@ -948,23 +1044,53 @@ textarea{
 }
 
 .btn-send {
-    background: var(--orange-light);
+    background: linear-gradient(135deg, var(--orange-light), var(--orange-accent));
     color: var(--primary-blue);
-    padding: 1rem 2rem;
+    padding: 1.1rem 2.5rem;
     border: 2px solid var(--primary-blue);
-    border-radius: 8px;
+    border-radius: 12px;
     font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
     display: block;
-    margin: 0 auto;
+    margin: 1.5rem auto 0;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-send::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-send:hover::before {
+    left: 100%;
 }
 
 .btn-send:hover {
-    background: var(--primary-blue);
-    color: var(--orange-light);
-    transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(30, 58, 138, 0.3);
+}
+
+.btn-send:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(30, 58, 138, 0.3);
+}
+
+.btn-send:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .cv-download-section {
@@ -1045,191 +1171,327 @@ footer{
     text-align: center;
 }
 
-@media screen and (max-width:900px) {
+/* Mejoras de responsividad y UX móvil */
+@media screen and (max-width: 1200px) {
+    .body {
+        margin: 0;
+        padding: 0 2rem;
+    }
+
+    .project-featured {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .project-links {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 900px) {
     #root{
         display: flex;
-        flex-direction: row;  
+        flex-direction: column;
     }
-    .body{
-        width:100%;
-        margin:0px;
 
+    .body{
+        width: 100%;
+        margin: 0;
+        padding: 0 1rem;
     }
+
+    /* Header más elegante en móvil */
     #header{
         display: flex;
-        flex-direction:column;
+        flex-direction: column;
         height: auto;
-        border-bottom: solid 2px rgba(156,156,156,0.3);
+        border-bottom: solid 2px rgba(156,156,156,0.2);
         position: sticky;
-        top: -8.5rem;
+        top: 0;
+        z-index: 1000;
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
+
     .nav-bar{
         display: flex;
         flex-direction: column;
-        top:0;
-        padding-bottom: 1.2rem;
+        top: 0;
+        padding: 1rem 0;
+        font-size: 1.1rem;
     }
+
     main{
-        display:flex;
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        width: 100%;
+    }
+
+    .unorder-list{
+        display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
-        margin:0 15px;
-    }
-    .unorder-list{
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
         align-items: center;
-        margin-top: 1rem;
-        padding-bottom: 1rem;
-        position: sticky;
+        margin: 0.5rem 0;
+        gap: 1rem;
     }
+
     li{
         list-style-type: none;
         list-style-position: inside;
-        margin:0;
-        padding:5px;
+        margin: 0;
+        padding: 0.3rem;
     }
+
     .list-nav a{
-        margin-left:0;
-        padding:5px
+        margin: 0;
+        padding: 0.5rem 0.8rem;
+        border-radius: 6px;
+        transition: all 0.3s ease;
     }
+
+    .list-nav a:hover {
+        background: rgba(30, 58, 138, 0.1);
+    }
+
     .button-resume{
-        margin:0;
+        margin: 0;
+        padding: 0.5rem 1rem;
     }
+
     .social-media{
-        display:flex;
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1rem 0;
     }
+
     .list-icon-left{
-        padding: 0.5rem;
-        position: inherit;
+        position: static;
+        padding: 1rem;
+        width: 100%;
+        order: -1;
     }
 
 
+    /* Mejora de contenedores y espaciado */
     .container{
-        display:flex;
+        display: flex;
         flex-direction: column;
+        padding: 0 1rem;
     }
-    .big-heading {  
-        font-size: 3rem;
-        line-height: normal;
+
+    /* Tipografías más legibles en móvil */
+    .big-heading {
+        font-size: 2.5rem;
+        line-height: 1.2;
         font-weight: bold;
         color: var(--orange-light);
         text-shadow: -1px -1px 2px var(--dark-blue);
-        margin:auto;
+        margin: 1rem auto;
         text-align: center;
+        padding: 0 1rem;
     }
+
     .big-heading2{
-        font-size: 3rem;
-        line-height: normal;
+        font-size: 2.2rem;
+        line-height: 1.3;
         font-weight: bold;
         color: var(--deep-navy);
         text-shadow: -1px -1px 2px var(--dark-blue);
-        margin: 0 0 3rem 0;
+        margin: 1rem auto 2rem;
         text-align: center;
-    }
-    h2{
-        text-align: center;
-    }
-    .center{
-        font-size: 1.2rem;
-        text-align:center;
-    }
-    img{
-        max-width: 100%;
-    }
-    #nombre{
-        position: sticky;
-        top:3.8rem;
-        padding-bottom: 2px;
-        background-color: #fff;
-        margin:0;
-    }
-    #high{
-        width: auto;
-    }
-    .subtittles{
-        position: sticky;
-        top:3.8rem;
-        padding-bottom: 5px;
-        background-color: #fff;
-        margin:0;
-    }
-    .section{
-        margin:0;
-    }
-    form{
-        width: 100%;
-    }
-    #contact{
-        width: auto;
-    }
-    form{
-        padding: 0;
-    }
-    #contact > h2{
-        background: none;
-        margin-top: 10px;
-    }
-    label, textarea{
-        max-width: 100%;
-    }
-    #button-send{
-        margin-bottom: 20px;
-    }
-    footer{
-        text-align: center;
-        padding: 20px 20px;
+        padding: 0 1rem;
     }
 
-    /* Responsive para nuevas secciones */
+    .hero h2 {
+        font-size: 1.4rem;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .center{
+        font-size: 1.1rem;
+        text-align: center;
+        padding: 0 0.5rem;
+        line-height: 1.6;
+    }
+
+    /* Imágenes responsivas */
+    img{
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Sistema de sticky mejorado */
+    #nombre{
+        position: sticky;
+        top: 6rem;
+        padding: 1rem 0;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        margin: 0;
+        z-index: 100;
+    }
+
+    .subtittles{
+        position: sticky;
+        top: 6rem;
+        padding: 1rem 0;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        margin: 2rem 0 1rem;
+        text-align: center;
+        z-index: 100;
+        font-size: 1.5rem;
+    }
+
+    /* Secciones mejor espaciadas */
+    .section{
+        margin: 1rem 0;
+        padding: 1rem;
+    }
+
+    #high {
+        width: auto;
+        margin: 1rem;
+        padding: 1rem;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    /* Mejoras específicas para el formulario */
+    .contact-form-container {
+        margin: 1rem 0;
+        padding: 1.5rem 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .btn-send {
+        width: 100%;
+        padding: 1rem;
+        margin: 1rem 0;
+    }
+
+    /* Footer optimizado */
+    footer{
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .footer-content {
+        max-width: none;
+        padding: 0 1rem;
+    }
+
+    /* Responsive para nuevas secciones mejorado */
     .hero-stats {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+
+    .stat-item {
+        width: 100%;
+        max-width: 200px;
+        padding: 1.2rem;
     }
 
     .about-intro {
         flex-direction: column;
         text-align: center;
+        gap: 1.5rem;
+    }
+
+    .about-intro img {
+        max-width: 150px;
+        margin: 0 auto;
     }
 
     .expertise-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .expertise-card {
+        padding: 1.2rem;
+        margin: 0.5rem;
     }
 
     .experience-header {
         flex-direction: column;
         text-align: center;
+        gap: 0.5rem;
+    }
+
+    .period {
+        align-self: center;
     }
 
     .project-featured {
         grid-template-columns: 1fr;
         text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .project-content h3 {
+        font-size: 1.5rem;
     }
 
     .project-card {
         flex-direction: column;
         text-align: center;
+        padding: 1.5rem 1rem;
     }
 
     .project-image {
         width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
+        max-width: 250px;
+        margin: 0 auto 1rem;
     }
 
     .skills-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .skill-category {
+        padding: 1.5rem 1rem;
     }
 
     .contact-methods {
         grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .contact-method {
+        padding: 1.5rem 1rem;
     }
 
     .cv-buttons {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+    }
+
+    .btn-cv-pdf,
+    .btn-cv-word {
+        width: 100%;
+        max-width: 200px;
     }
 
     .legacy-grid {
@@ -1239,18 +1501,94 @@ footer{
     .skill-legend {
         flex-direction: column;
         align-items: center;
-        gap: 1rem;
+        gap: 0.8rem;
     }
 
     .project-links {
         flex-direction: column;
         align-items: center;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .project-links a {
+        width: 100%;
+        max-width: 200px;
+        text-align: center;
     }
 
     .project-links-mini {
         flex-direction: column;
         align-items: center;
+        gap: 0.8rem;
+    }
+
+    .tech-tags,
+    .project-features,
+    .project-tech,
+    .project-tech-mini {
+        justify-content: center;
         gap: 0.5rem;
     }
 
+    /* Mejora para listas de logros */
+    .achievements li {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+        line-height: 1.4;
+    }
+
+}
+
+/* Mejoras adicionales para pantallas muy pequeñas */
+@media screen and (max-width: 480px) {
+    .big-heading {
+        font-size: 2rem;
+        margin: 0.5rem auto;
+    }
+
+    .big-heading2 {
+        font-size: 1.8rem;
+        margin: 0.5rem auto 1.5rem;
+    }
+
+    .section {
+        padding: 0.5rem;
+    }
+
+    .hero-stats {
+        margin: 1rem 0;
+    }
+
+    .stat-item {
+        padding: 1rem;
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .project-featured,
+    .experience-item,
+    .skill-category,
+    .contact-method {
+        padding: 1rem 0.8rem;
+        margin: 0.8rem 0;
+    }
+
+    .contact-form-container {
+        padding: 1rem 0.8rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.7rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-send {
+        padding: 0.9rem;
+        font-size: 1rem;
+    }
 }
