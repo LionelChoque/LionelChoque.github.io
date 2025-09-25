@@ -450,7 +450,7 @@ body {
     background: rgba(32, 43, 95, 0.05);
     padding: 2rem;
     border-radius: 10px;
-    border-left: 4px solid var(--blue-gray);
+    border-left: 4px solid var(--slate-gray);
     margin: 2rem 0;
 }
 
@@ -845,7 +845,7 @@ body {
 }
 
 .skill-item.advanced {
-    background: var(--blue-gray);
+    background: var(--slate-gray);
     color: white;
 }
 
@@ -886,7 +886,7 @@ body {
 }
 
 .color.advanced {
-    background: var(--blue-gray);
+    background: var(--slate-gray);
 }
 
 .color.intermediate {
