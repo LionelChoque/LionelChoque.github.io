@@ -410,9 +410,6 @@
                         
                         <!-- Campos ocultos para mejor configuración de Formspree -->
                         <input type="hidden" name="_subject" value="Nuevo mensaje desde Portfolio - Lionel Choque">
-                        <input type="hidden" name="_replyto" value="email">
-                        <input type="hidden" name="_next" value="https://lionelchoque.github.io/#contact">
-                        <input type="hidden" name="_captcha" value="false">
                         
                         <div class="form-group">
                             <label for="name">Tu nombre:</label>
@@ -691,6 +688,14 @@
 
                 const responseData = await response.json().catch(() => ({}));
                 console.log('📋 Datos de respuesta:', responseData);
+
+                // Debug específico para errores de validación
+                if (responseData.errors) {
+                    console.log('🚨 Errores de validación detallados:', responseData.errors);
+                    responseData.errors.forEach((error, index) => {
+                        console.log(`Error ${index + 1}:`, error);
+                    });
+                }
 
                 if (response.ok) {
                     // Mostrar mensaje de éxito
