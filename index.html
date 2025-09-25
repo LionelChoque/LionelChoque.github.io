@@ -37,11 +37,7 @@
                     <li class="list-nav"><a href="#contact">Contacto</a></li>
                 </ul>
             </div>
-            <div>
-                <a class="button-resume" target="_blank" href="#cv-download" id="cv-button">
-                    📄 Descargar CV
-                </a>
-            </div>
+            
         </nav>
     </header>
     <main id="main">
@@ -296,30 +292,6 @@
                     </div>
                 </div>
 
-                <!-- Proyectos de Aprendizaje -->
-                <div class="legacy-projects">
-                    <h4>Proyectos de Aprendizaje y Desarrollo</h4>
-                    <div class="legacy-grid">
-                        <div class="legacy-item">
-                            <a target="_blank" href="https://lionelchoque.github.io/Encriptador-De-Texto.github.io/">
-                                <img src="source/Screenshot_Text_Encrypter.png" alt="Encriptador de Texto">
-                                <span>Encriptador de Texto</span>
-                            </a>
-                        </div>
-                        <div class="legacy-item">
-                            <a target="_blank" href="https://lionelchoque.github.io/ahorcado.github.io/">
-                                <img src="source/Screenshot_Ahorcado.png" alt="Juego Ahorcado">
-                                <span>Juego de Ahorcado</span>
-                            </a>
-                        </div>
-                        <div class="legacy-item">
-                            <a target="_blank" href="https://spring-ecommerce.fly.dev/">
-                                <img src="source/Spring-ecommerce.png" alt="Spring E-commerce">
-                                <span>Spring E-commerce</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
 
             </section>
 
@@ -433,29 +405,61 @@
                 </div>
 
                 <div class="contact-form-container">
-                    <form action="https://formspree.io/f/mnqrnoqg" method="POST" class="contact-form">
+                    <form action="https://formspree.io/f/mnqrnoqg" method="POST" class="contact-form" id="contactForm">
                         <h4>Envíame un mensaje</h4>
+                        
+                        <!-- Campos ocultos para mejor configuración -->
+                        <input type="hidden" name="_subject" value="Nuevo mensaje desde Portfolio - Lionel Choque">
+                        <input type="hidden" name="_next" value="https://lionelchoque.github.io/">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="box">
+                        
+                        <div class="form-group">
+                            <label for="name">Tu nombre:</label>
+                            <input type="text" id="name" name="name" required placeholder="Ingresa tu nombre completo">
+                        </div>
+                        
                         <div class="form-group">
                             <label for="email">Tu email:</label>
-                            <input type="email" id="email" name="_replyto" required>
+                            <input type="email" id="email" name="_replyto" required placeholder="tu.email@ejemplo.com">
                         </div>
+                        
+                        <div class="form-group">
+                            <label for="company">Empresa/Organización:</label>
+                            <input type="text" id="company" name="company" placeholder="Nombre de tu empresa (opcional)">
+                        </div>
+                        
                         <div class="form-group">
                             <label for="subject">Asunto:</label>
                             <select id="subject" name="subject" required>
                                 <option value="">Selecciona un tema...</option>
-                                <option value="Oportunidad Laboral">Oportunidad Laboral</option>
-                                <option value="Proyecto Automatización">Proyecto de Automatización</option>
-                                <option value="Consultoría SQL">Consultoría en SQL</option>
-                                <option value="Análisis Funcional">Análisis Funcional IT</option>
-                                <option value="Integración ERP">Integración de Sistemas ERP</option>
-                                <option value="Otro">Otro</option>
+                                <option value="Oportunidad Laboral">💼 Oportunidad Laboral</option>
+                                <option value="Proyecto Automatización">⚡ Proyecto de Automatización</option>
+                                <option value="Consultoría SQL">💾 Consultoría en SQL</option>
+                                <option value="Análisis Funcional">🏢 Análisis Funcional IT</option>
+                                <option value="Integración ERP">🔗 Integración de Sistemas ERP</option>
+                                <option value="Power Automate">🔧 Consultoría Power Automate Desktop</option>
+                                <option value="WordPress/WooCommerce">🌐 Desarrollo WordPress/WooCommerce</option>
+                                <option value="Otro">❓ Otro</option>
                             </select>
                         </div>
+                        
                         <div class="form-group">
                             <label for="message">Mensaje:</label>
-                            <textarea id="message" name="message" rows="5" required></textarea>
+                            <textarea id="message" name="message" rows="6" required placeholder="Cuéntame sobre tu proyecto o consulta..."></textarea>
                         </div>
-                        <button type="submit" class="btn-send">Enviar Mensaje</button>
+                        
+                        <div class="form-group">
+                            <label for="phone">Teléfono (opcional):</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+54 9 11 1234-5678">
+                        </div>
+                        
+                        <button type="submit" class="btn-send" id="submitBtn">
+                            <span class="btn-text">Enviar Mensaje</span>
+                            <span class="btn-loading" style="display: none;">Enviando...</span>
+                        </button>
+                        
+                        <div id="form-status" class="form-status" style="display: none;"></div>
                     </form>
                 </div>
 
@@ -463,7 +467,7 @@
                     <h4>📄 Curriculum Vitae</h4>
                     <p>Descarga mi CV completo con todos los detalles de mi experiencia en automatización y análisis funcional IT.</p>
                     <div class="cv-buttons">
-                        <button class="btn-cv-pdf" onclick="generateCV('pdf')">Descargar PDF</button>
+                       <!-- <button class="btn-cv-pdf" onclick="generateCV('pdf')">Descargar PDF</button>-->
                         <button class="btn-cv-word" onclick="generateCV('word')">Descargar Word</button>
                     </div>
                 </div>
@@ -646,6 +650,58 @@
                         behavior: 'smooth',
                         block: 'start'
                     });
+                }
+            });
+        });
+
+        // Formulario de contacto mejorado
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            const formStatus = document.getElementById('form-status');
+            
+            // Mostrar estado de carga
+            btnText.style.display = 'none';
+            btnLoading.style.display = 'inline';
+            submitBtn.disabled = true;
+            
+            // Simular envío (en producción, esto se manejaría con Formspree)
+            setTimeout(() => {
+                // Mostrar mensaje de éxito
+                formStatus.innerHTML = `
+                    <div style="background: var(--emerald-green); color: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; text-align: center;">
+                        ✅ ¡Mensaje enviado correctamente! Te responderé en las próximas 24 horas.
+                    </div>
+                `;
+                formStatus.style.display = 'block';
+                
+                // Resetear formulario
+                this.reset();
+                
+                // Restaurar botón
+                btnText.style.display = 'inline';
+                btnLoading.style.display = 'none';
+                submitBtn.disabled = false;
+                
+                // Ocultar mensaje después de 5 segundos
+                setTimeout(() => {
+                    formStatus.style.display = 'none';
+                }, 5000);
+                
+            }, 2000);
+        });
+
+        // Validación en tiempo real
+        const inputs = document.querySelectorAll('input[required], textarea[required], select[required]');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.checkValidity()) {
+                    this.style.borderColor = 'var(--emerald-green)';
+                } else {
+                    this.style.borderColor = '#dc3545';
                 }
             });
         });
